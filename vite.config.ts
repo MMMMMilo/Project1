@@ -17,17 +17,17 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-    // css: {
-  //   preprocessorOptions: {
-  //     less: {
-  //       javascriptEnabled: true,
-  //     },
-  //     scss: {
-  //       additionalData: 
-  //       `@import "./src/assets/scss/main.scss";`,
-  //     },
-  //   },
-  // },
+    css: {
+    preprocessorOptions: {
+      // less: {
+      //   javascriptEnabled: true,
+      // },
+      scss: {
+        additionalData: 
+        `@import "./src/assets/scss/main.scss";`,
+      },
+    },
+  },
   //   server:{
   //   host:'100.75.8.167'
   // }
