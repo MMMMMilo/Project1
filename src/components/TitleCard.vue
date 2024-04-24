@@ -8,14 +8,14 @@
         src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
         cover
         ></v-img>
-    
+
         <v-card-title>
         Order Food Online
         </v-card-title>
-    
+
     </v-card>
-    </template>
+</template>
     
-    <script setup lang="ts">
-    
-    </script>
+<script setup lang="ts">
+
+</script>
