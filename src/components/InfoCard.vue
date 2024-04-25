@@ -1,23 +1,47 @@
+<script setup lang="ts">
+    import { defineProps } from 'vue';
+    import { computed } from 'vue';
+
+    const props = defineProps({
+        imageSrc:String,
+        title:String,
+    });
+
+    const limitTitle = computed(()=>{
+        const maxLengh = 18;
+        if(props.title.length > maxLengh){
+            return props.title.substring(0,maxLengh-3)+'...';
+        }
+        return props.title;
+    })
+</script>
+
 <template>
-    <div>
-        <v-card class="mx-auto my-12 " max-width="374" variant="flat">
+    <div class="card-wrap rounded-lg">
+        <v-card class="mx-auto" max-width="374" variant="flat">
             <v-img
             height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            :src="imageSrc"
             cover></v-img>
-            <div class="d-flex justify-space-between align-center">
-                <v-card-title>Starbucks</v-card-title>
-                <div >
-                    <v-icon class="mdi mdi-star" color="amber"></v-icon>
-                    <span class="text-black">4.5</span>
-                    <span class="text-grey">/5</span>
+            <v-card-text class="pa-4">
+                <div class="d-flex justify-space-between align-center">
+                    <v-card-title class="font-weight-medium">{{limitTitle}}</v-card-title>
+                    <div >
+                        <v-icon class="mdi mdi-star" color="amber"></v-icon>
+                        <span class="text-black">4.5</span>
+                        <span class="text-grey">/5</span>
+                    </div>
                 </div>
-            </div>
-            <v-card-text>
             <v-row align="center" class="mx-0">
-                <p class="grey--text"><span class="primary--text f-600">$20</span> • Cofee, set menu • 15 - 20 min </p>
+                <p class="grey--text"><span class="primary--text text-pink-darken-1">$20</span> • Cofee, set menu • 15 - 20 min </p>
             </v-row>
             </v-card-text>
         </v-card>
     </div>
 </template>
+
+<style lang="scss" scoped>
+    .card-wrap{
+        border: 1px solid #eee;
+    }
+</style>
