@@ -2,6 +2,26 @@
     import TitleCard from "@/components/TitleCard.vue";
     import ImgaeCard from "@/components/ImageCard.vue";
     import InfoCard from "@/components/InfoCard.vue";
+    import HomeNav from "@/components/HomeNav.vue";
+    import MainHeader from "@/components/MainHeader.vue";
+    import { ref,onMounted,onBeforeUnmount } from "vue";
+
+    const showHeader = ref(false);
+    const handleScroll = ()=>{
+      const orderSection = document.getElementById('search-bar');
+      if(orderSection){
+        const orderPosition = orderSection.getBoundingClientRect().top + window.scrollY;
+        showHeader.value = window.scrollY >= orderPosition;
+      }
+    }
+
+    onMounted(()=>{
+      window.addEventListener('scroll',handleScroll);
+    })
+
+    onBeforeUnmount(()=>{
+      window.removeEventListener('scroll',handleScroll);
+    })
 
     const features = [
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/15.15c95d2.jpg',title:'Order Food Online'},
@@ -41,29 +61,32 @@
 
 <template>
   <main>
+    <MainHeader v-if="showHeader" />    
     <div class="hero-section">
       <div class="container py-16 text-center">
+        <HomeNav/>
         <div class="d-flex flex-column align-center">
           <div class="slogn text-white py-10">
             <h1 class="text-h3">Discover the best food & drinks in <span class="font-weight-black">New York</span></h1>
             <h4 class="text-h6">The meals you love, delivered with care</h4>
           </div>
-          <div class="location bg-white d-flex align-center col-lg-7 col-12 py-1">
+          <div class="location bg-white rounded d-flex align-center col-lg-7 col-12 ">
             <span class="mdi mdi-map-marker">New York</span>
             <v-btn variant="text" class="">
               <v-icon class="mdi mdi-crosshairs-gps"></v-icon>
               Locate Me
             </v-btn>
-            <div class="search-bar d-flex flex-grow-1">
+            <div class="search-bar d-flex flex-grow-1" id="search-bar">
               <v-text-field
-                single-line
+                variant="solo"
                 placeholder="Seaech for restaurant"
                 hide-details="auto"
                 class="search-input"
+                rounded="0"
               ></v-text-field>
               <RouterLink to="/ResturantTwoColumn">
                 <v-btn
-                  class="text-none text-subtitle-1 search-btn"
+                  class="text-none text-subtitle-1 search-btn "
                   color="#D23F57"
                   size="small"
                 >
@@ -75,7 +98,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="bg-grey-lighten-5">
       <div class="container py-15">
         <div class="row card-wrap">
@@ -157,10 +180,11 @@
             <div class="d-flex search-bar">
               <v-text-field
                 density="compact"
-                variant="outlined"
+                variant="solo"
                 placeholder="Email"
                 hide-details="auto"
                 class="search-input"
+                rounded="e-0"
               ></v-text-field>
               <RouterLink to="/ResturantTwoColumn">
                 <v-btn
@@ -189,13 +213,12 @@
 @import "@/assets/scss/main.scss";
 
 .search-bar{
-  outline: 1px solid #eee;
   .search-input{
-    border-radius: 4px 0 0 4px;
-    border: none;
     width: 100%;
+    border-radius:4px 0 0 4px !important;
   }
   .search-btn{
+    border-radius: 0 4px 4px 0;
     height: 100%;
   }
 }

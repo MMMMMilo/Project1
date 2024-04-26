@@ -1,18 +1,15 @@
 <template>
-    <v-toolbar 
-        density="compact"
-        :elevation="4"
-        flat
-        class="pa-1 bg-white nav-bar" >
-        <v-container fluid class="px-0">
+    <v-toolbar dense class="pa-2" color="transparent" flat>
+        <v-container fluid class="px-0 text-white">
             <div class="d-flex align-center">
                 <div class="px-5">
                     <RouterLink to="/">
                         <v-avatar size="40">
-                            <v-img alt="John" src="https://cdn.vuetifyjs.com/images/john.jpg"></v-img>
+                            <v-img alt="logo" src="https://foodhub-nuxt.vercel.app/_nuxt/img/logo.4a3964e.png"></v-img>
                         </v-avatar>
                     </RouterLink>
                 </div>
+                
                 <v-spacer></v-spacer>
                 
                 <v-btn class="mx-2">
@@ -30,18 +27,3 @@
         </v-container>
     </v-toolbar>
 </template>
-
-
-
-
-<style lang="scss" scoped>
-@import "@/assets/scss/main.scss";
-
-    .nav-bar{
-        position: fixed;
-        z-index: 999;
-    }
-    .location{
-        border: 1px solid #eee;
-    }
-</style>
