@@ -17,8 +17,8 @@
 </script>
 
 <template>
-    <div class="card-wrap rounded-lg">
-        <v-card class="mx-auto" max-width="374" variant="flat">
+    <div class="card-wrap rounded-lg my-2">
+        <v-card class="mx-auto" variant="flat">
             <v-img
             height="250"
             :src="imageSrc"

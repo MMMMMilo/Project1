@@ -44,6 +44,13 @@
     {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/6.9bc51a4.png',name:'Emmet McDermott',text:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum deleniti asperiores quo provident pariatur iste necessitatibus.'},
     {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/7.7edf59d.png',name:'Emmet McDermott',text:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum deleniti asperiores quo provident pariatur iste necessitatibus.'},
   ]
+
+  const cateDrawer = ref(false);
+  const toggleCateDrawer = ()=>{
+    cateDrawer.value = !cateDrawer.value
+  };
+
+
 </script>
 
 <template>
@@ -99,10 +106,10 @@
         </div>
       </div>
       <div>
-        <v-button>dawar</v-button>
         <v-tabs
           v-model="tab"
           align-tabs="start"
+          color="pink-darken-1"
         >
           <v-tab :value="1">Order Online</v-tab>
           <v-tab :value="2">Book a Table</v-tab>
@@ -110,11 +117,41 @@
         </v-tabs>
         <v-window v-model="tab">
           <v-window-item :value="1">
+            <div class="mobile">
+              <v-btn color="pink-darken-1 mt-6" @click="toggleCateDrawer">
+                <v-icon class="mdi mdi-menu"/>Categories
+              </v-btn>
+              <div class="side-menu" v-show="cateDrawer">
+                <div class="drawer-bg" @click="toggleCateDrawer">
+                    <div @click.stop>
+                      <v-layout> 
+                        <v-navigation-drawer v-model="cateDrawer">
+                          <div class="d-flex flex-row-reverse">
+                            <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click="toggleCateDrawer"/>
+                          </div>
+                          <div class="d-flex flex-column ga-4 pa-6">
+                            <RouterLink :to="order.to" v-for="(order, index) in orders" :key="index" class="text-grey-darken-2 mb-6 ">{{ order.text }}</RouterLink>
+                          </div>
+                        </v-navigation-drawer>
+                      </v-layout>
+                    </div>
+                </div>
+            </div>
+              <v-layout>
+                <v-navigation-drawer v-model="drawer" temporary>
+                  <div class="d-flex flex-row-reverse">
+                    <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click=" drawer = !drawer"/>
+                  </div>
+                  <div class="d-flex flex-column pr-10">
+                  </div>
+                </v-navigation-drawer>
+              </v-layout>
+            </div>
             <div class="row mt-6">
-              <div class="d-flex flex-column pr-10 col-3">
+              <div class="d-flex flex-column pr-10 col-3 desktop">
                 <RouterLink :to="order.to" v-for="(order, index) in orders" :key="index" class="text-grey-darken-2 mb-6 ">{{ order.text }}</RouterLink>
               </div>
-              <div class="d-flex flex-column col-9">
+              <div class="d-flex flex-column col-12 col-md-9">
                 <h2>Recommmended</h2>
                 <InfoCardJustify  v-for="item in 4"/>
               </div>
@@ -151,7 +188,7 @@
             </div>
           </v-window-item>
           <v-window-item :value="3">
-            <div class="d-flex mt-6">
+            <div class="row mt-6">
               <div class="col-12 col-md-6 col-lg-6 d-flex flex-column ga-6">
                 <div v-for="(post,index) in posts" :key="index">
                     <Post
@@ -186,5 +223,31 @@
 
 img{
   width: 100%
+}
+.mobile{
+  display: none;
+}
+@media screen and (max-width: $md){
+  .mobile{
+    display: block;
+  }
+}
+.desktop{
+  display: block;
+}
+@media screen and (max-width: $md){
+  .desktop{
+    display: none !important;
+  }
+}
+.drawer-bg{
+    background-color: rgba(255, 255, 255, 0.2);
+    min-height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
 }
 </style>
