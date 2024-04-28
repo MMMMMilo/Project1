@@ -3,53 +3,67 @@
   import InfoCardJustify from '@/components/InfoCardJustify.vue';
   import Post from '@/components/Post.vue';
   import Comment from '@/components/Comment.vue';
-  import { ref } from 'vue';
 
-  const yourBreadCrumb = [
+  import { ref,onMounted } from 'vue';
+  import { useProductStore } from '@/stores/products';
+
+  const { orders,filter,productDisplay,filterProducts } = useProductStore();
+
+  onMounted(()=>{
+    filter('DPB Special Combos')
+  })
+
+  interface BreadCrumb {
+    text:string;
+    to?:string;
+    active?:boolean;
+  }
+  const yourBreadCrumb: BreadCrumb[] = [
     {text:'Home',to:'/'},
     {text:'New York',to:'/'},
     {text:'Resturtant',active:true},
   ]
 
-  const resturantImages = [
+  interface ResturantImage {
+    image:string;
+  }
+  const resturantImages: ResturantImage[]= [
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/foodOne.f29cb9f.png'},
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/foodTwo.3b74f91.png'},
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/foodThree.fd71db5.png'},
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/foodFour.e242457.png'},
-  ]
+]
 
-  const tab = ref(null);
+  const tab = ref<string | null>(null);
 
-  const orders = [
-    {text:'DPB Special Combos (10)',to:'/FoodMenu'},
-    {text:'Chineese Starters (30)',to:'/FoodMenu'},
-    {text:'Chinese Main Course (75)',to:'/FoodMenu'},
-    {text:'Indian Main Course (63)',to:'/FoodMenu'},
-    {text:'Rice & Pulao (7)',to:'/FoodMenu'},
-    {text:'Desserts (1)',to:'/FoodMenu'},
-    {text:'Soup & wonton (15)',to:'/FoodMenu'},
-    {text:'Accompaniment (4)',to:'/FoodMenu'},
-    {text:'Biryani (1)',to:'/FoodMenu'},
-  ]
+  const items:string[] =['Foo','Bar','Fizz','Buzz'];
 
-  const items=['Foo','Bar','Fizz','Buzz'];
-
+  interface Post{
+    avatarSrc:string;
+    imageSrc: string[];
+    name: string;
+  }
   const posts = [
     {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/8.38098d6.png',imageSrc:['https://foodhub-nuxt.vercel.app/_nuxt/img/foodFive.63a95c3.png','https://foodhub-nuxt.vercel.app/_nuxt/img/foodSix.d1a6e1c.png'],name:'Abriella Bond'},
-    {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/6.9bc51a4.png',imageSrc:'',name:'Abriella Bond'},
-    {avatarSrc:'	https://foodhub-nuxt.vercel.app/_nuxt/img/9.19544e8.jpg',imageSrc:'',name:'Abriella Bond'},
+    {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/6.9bc51a4.png',imageSrc:[],name:'Abriella Bond'},
+    {avatarSrc:'	https://foodhub-nuxt.vercel.app/_nuxt/img/9.19544e8.jpg',imageSrc:[],name:'Abriella Bond'},
   ]
 
+  interface Comment {
+    avatarSrc: string;
+    name: string;
+    text: string;
+  }
   const comments = [
     {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/6.9bc51a4.png',name:'Emmet McDermott',text:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum deleniti asperiores quo provident pariatur iste necessitatibus.'},
     {avatarSrc:'https://foodhub-nuxt.vercel.app/_nuxt/img/7.7edf59d.png',name:'Emmet McDermott',text:'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum deleniti asperiores quo provident pariatur iste necessitatibus.'},
   ]
 
   const cateDrawer = ref(false);
-  const toggleCateDrawer = ()=>{
+  const toggleCateDrawer = () :void=>{
     cateDrawer.value = !cateDrawer.value
   };
-
+  
 
 </script>
 
@@ -121,39 +135,47 @@
               <v-btn color="pink-darken-1 mt-6" @click="toggleCateDrawer">
                 <v-icon class="mdi mdi-menu"/>Categories
               </v-btn>
-              <div class="side-menu" v-show="cateDrawer">
-                <div class="drawer-bg" @click="toggleCateDrawer">
-                    <div @click.stop>
-                      <v-layout> 
-                        <v-navigation-drawer v-model="cateDrawer">
-                          <div class="d-flex flex-row-reverse">
-                            <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click="toggleCateDrawer"/>
-                          </div>
-                          <div class="d-flex flex-column ga-4 pa-6">
-                            <RouterLink :to="order.to" v-for="(order, index) in orders" :key="index" class="text-grey-darken-2 mb-6 ">{{ order.text }}</RouterLink>
-                          </div>
-                        </v-navigation-drawer>
-                      </v-layout>
-                    </div>
-                </div>
-            </div>
               <v-layout>
-                <v-navigation-drawer v-model="drawer" temporary>
-                  <div class="d-flex flex-row-reverse">
-                    <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click=" drawer = !drawer"/>
+                <div class="side-menu" v-show="cateDrawer">
+                  <div class="drawer-bg" @click="toggleCateDrawer">
+                      <div @click.stop>
+                          <v-navigation-drawer v-model="cateDrawer">
+                            <div class="d-flex flex-row-reverse">
+                              <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click="toggleCateDrawer"/>
+                            </div>
+                            <div class="d-flex flex-column ga-4 pa-6">
+                              <p 
+                                v-for="(order, index) in orders" 
+                                :key="index" 
+                                class="text-grey-darken-2 mb-6"
+                                @click="filter(order.text)"
+                              >{{ order.text }}({{ order.sum }})</p>
+                            </div>
+                          </v-navigation-drawer>
+                      </div>
                   </div>
-                  <div class="d-flex flex-column pr-10">
-                  </div>
-                </v-navigation-drawer>
+                </div>
               </v-layout>
             </div>
             <div class="row mt-6">
               <div class="d-flex flex-column pr-10 col-3 desktop">
-                <RouterLink :to="order.to" v-for="(order, index) in orders" :key="index" class="text-grey-darken-2 mb-6 ">{{ order.text }}</RouterLink>
+                <p  
+                  v-for="(order, index) in orders" 
+                  :key="index" 
+                  class="text-grey-darken-2 mb-6"
+                  @click="filter(order.text)"
+                >{{ order.text }}({{ order.sum }})</p>
               </div>
               <div class="d-flex flex-column col-12 col-md-9">
                 <h2>Recommmended</h2>
-                <InfoCardJustify  v-for="item in 4"/>
+                <InfoCardJustify  
+                  v-for="product in filterProducts"
+                  :key="product.id"
+                  :id="product.id"
+                  :title="product.title"
+                  :imageSrc="product.image"
+                  :quantity="product.quantity"
+                />
               </div>
             </div>
           </v-window-item>
@@ -241,7 +263,7 @@ img{
   }
 }
 .drawer-bg{
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.2);
     min-height: 100%;
     position: fixed;
     top: 0;

@@ -1,10 +1,11 @@
 <script setup lang="ts">
     import { defineProps } from 'vue';
 
-    const props = defineProps({
-        imageSrc:String,
-        title:String,
-    });
+    interface Props {
+        imageSrc: string;
+        title: string;
+    }
+    const props = defineProps<Props>();
 </script>
 
 <template>

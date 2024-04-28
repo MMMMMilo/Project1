@@ -2,12 +2,15 @@
     import { defineProps } from 'vue';
     import { RouterLink } from 'vue-router';
     
-    const props = defineProps({
-        breadcrumb:{
-            type:Array,
-            required:true
-        }
-    })
+    interface BreadcrumbItem{
+        text:string;
+        to?:string,
+        active?:boolean
+    }
+    const props = defineProps<{
+        breadcrumb:BreadcrumbItem[];
+    }>();
+
 </script>
 
 <template>

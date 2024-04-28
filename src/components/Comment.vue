@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
-    
-    const props = defineProps({
-        avatarSrc:String,
-        name:String,
-        text:String,
-    })
+    import { defineProps } from 'vue';
+    interface Props {
+        avatarSrc: string;
+        name: string;
+        text: string;
+    }
+    const props = defineProps<Props>();
 </script>
 
 <template>

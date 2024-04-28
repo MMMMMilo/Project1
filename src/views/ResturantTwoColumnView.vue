@@ -3,12 +3,22 @@
     import InfoCard from "@/components/InfoCard.vue";
     import { ref } from 'vue';
 
-    const yourBreadCrumb = [
+    interface BreadCrumb {
+      text:string;
+      to?:string;
+      active?:boolean;
+    }
+    const yourBreadCrumb: BreadCrumb[] = [
     {text:'Home',to:'/'},
     {text:'New York',to:'/'},
     {text:'Resturtant',active:true},
   ];
-  const restaurants = [
+
+  interface Restaurant {
+    image:string;
+    title:string;
+  }
+  const restaurants:Restaurant[] = [
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/15.15c95d2.jpg',title:'Starbucks'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/16.bbc24cb.jpg',title:'Mughal Masala Masala Masala Masala'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/17.3634737.jpg',title:'Woondal'},
@@ -131,7 +141,7 @@
   }
 }
 .drawer-bg{
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color:rgba(0, 0, 0, 0.2);
     min-height: 100%;
     position: fixed;
     top: 0;

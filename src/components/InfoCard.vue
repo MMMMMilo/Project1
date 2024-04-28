@@ -2,10 +2,11 @@
     import { defineProps } from 'vue';
     import { computed } from 'vue';
 
-    const props = defineProps({
-        imageSrc:String,
-        title:String,
-    });
+    interface Props {
+        imageSrc: string;
+        title: string;
+    }
+    const props = defineProps<Props>();
 
     const limitTitle = computed(()=>{
         const maxLengh = 18;

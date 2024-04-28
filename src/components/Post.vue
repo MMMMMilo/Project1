@@ -2,6 +2,7 @@
     import type { PropType } from 'vue';
     import { defineProps } from 'vue';
     
+    
     const props = defineProps({
         avatarSrc:String,
         imageSrc:Array as PropType<string[]>,

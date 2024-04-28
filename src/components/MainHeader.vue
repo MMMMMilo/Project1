@@ -1,54 +1,14 @@
-<!-- <script setup lang="ts">
-    import { ref } from 'vue';
-    const NavDrawer = ref(false);
-    const toggleNavDrawer = ()=>{
-        NavDrawer.value = !NavDrawer.value
-    };
-
-    const dashboards= [
-        {title:'Review',to:''},
-        {title:'Photos',to:''},
-        {title:'Order List',to:''},
-        {title:'Order History',to:''},
-        {title:'Followers',to:''},
-        {title:'Bookmarks',to:''},
-    ];
-    const resturants = [
-        {title:'Food Menu',to:'/FoodMenu'},
-        {title:'Resturant Two Column',to:'/ResturantTwoColumn'},
-        {title:'Search Resturant',to:''},
-    ];
-
-    const collapseStatus = ref({
-        dashboards: true,
-        resturants: true,
-    });
-
-        // Define the valid keys for collapseStatus
-        // type CollapseKey = keyof typeof collapseStatus;
-
-        // const toggleCollapse = (collapseName: CollapseKey) => {
-        //     collapseStatus[collapseName] = !collapseStatus[collapseName];
-        // };
-
-    const toggleCollapse = (collapseName) => {
-        collapseStatus.value[collapseName] = !collapseStatus.value[collapseName]
-        console.log(collapseStatus.value['dashboards']);
-    };
-
-    
-</script> -->
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useCartStore } from '@/stores/cart';
 
-// Define types for the navigation items
+const { cartList,deleteCart,limitTitle,count } = useCartStore();
+
 interface NavItem {
     title: string;
     to: string;
 }
 
-// Setup reactive states
-const NavDrawer = ref(false);
 const dashboards: NavItem[] = [
     {title: 'Review', to: ''},
     {title: 'Photos', to: ''},
@@ -63,28 +23,34 @@ const resturants: NavItem[] = [
     {title: 'Search Restaurant', to: ''},
 ];
 
-// Define a type for collapse states to improve type safety
 interface CollapseStatus {
     dashboards: boolean;
     resturants: boolean;
-}
+};
 const collapseStatus = ref<CollapseStatus>({
     dashboards: false,
     resturants: false,
 });
 
-// Function to toggle the navigation drawer
-const toggleNavDrawer = () => {
-    NavDrawer.value = !NavDrawer.value;
-};
-
-// Define the valid keys for collapseStatus dynamically
 type CollapseKey = keyof CollapseStatus;
-
-// Function to toggle collapse state for a given key
 const toggleCollapse = (collapseName: CollapseKey) => {
     collapseStatus.value[collapseName] = !collapseStatus.value[collapseName];
 };
+
+interface DrawerStatus {
+    sideNav:Boolean,
+    shoppingCart:Boolean,
+}
+const drawerStatus = ref<DrawerStatus>({
+    sideNav:false,
+    shoppingCart:false,
+});
+
+type DrawerKey = keyof DrawerStatus;
+const toggleDrawer = (drawerName: DrawerKey) => {
+    drawerStatus.value[drawerName] = !drawerStatus.value[drawerName]
+};
+
 </script>
 
 
@@ -118,19 +84,19 @@ const toggleCollapse = (collapseName: CollapseKey) => {
                         <span>Account</span>
                     </v-btn>
                     <v-btn icon class="mx-2">
-                        <v-icon class="mdi mdi-cart-outline"></v-icon>
-                        <span>(8)</span>
+                        <v-icon class="mdi mdi-cart-outline" @click="toggleDrawer('shoppingCart')"></v-icon>
+                        <span>({{ useCartStore().count }})</span>
                     </v-btn>
-                    <v-app-bar-nav-icon class="mx-2" @click="toggleNavDrawer"></v-app-bar-nav-icon>
+                    <v-app-bar-nav-icon class="mx-2" @click="toggleDrawer('sideNav')"></v-app-bar-nav-icon>
                 </div>
             </v-container>
         </v-toolbar>
-        <div class="side-nav" v-show="NavDrawer">
-            <div class="drawer-bg" @click="toggleNavDrawer">
+        <div class="side-nav" v-show="drawerStatus.sideNav">
+            <div class="drawer-bg" @click="toggleDrawer('sideNav')">
                 <div @click.stop>
-                    <v-navigation-drawer v-model="NavDrawer" absolute >
+                    <v-navigation-drawer v-model="drawerStatus.sideNav" disable-resize-watcher >
                         <div class="d-flex flex-row-reverse">
-                            <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click=" toggleNavDrawer"/>
+                            <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click="toggleDrawer('sideNav')"/>
                         </div>
                         <div class="d-flex flex-column ga-4 pa-6">
                             <div class="d-flex algin-center ga-4">
@@ -152,6 +118,30 @@ const toggleCollapse = (collapseName: CollapseKey) => {
                                 </li>
                             </ul>
                         </div>
+                    </v-navigation-drawer>
+                </div>
+            </div>  
+        </div>
+        <div class="side-nav" v-show="drawerStatus.shoppingCart">
+            <div class="drawer-bg" @click="toggleDrawer('shoppingCart')">
+                <div @click.stop>
+                    <v-navigation-drawer v-model="drawerStatus.shoppingCart" absolute disable-resize-watcher location="end">
+                        <div class="d-flex flex-row-reverse">
+                            <v-btn variant="plain" append-icon="mdi mdi-close" class="pa-4" @click=" toggleDrawer('shoppingCart')"/>
+                        </div>
+                        <v-container class="d-flex flex-column ga-4 pa-6">
+                            <v-row class="align-center" v-for="item in cartList" :key="item.id">
+                                <div class="col-5">
+                                    <span>{{ item.id }}</span>
+                                    <v-img :src="item.image" aspect-ratio="1" cover/>
+                                </div>
+                                <div class="col-5">
+                                    <h6>{{ limitTitle(item.title) }}</h6>
+                                    <span>Number:{{ item.quantity }}</span>
+                                </div>
+                                <v-icon icon="mdi mdi-close" class="col-2" @click=" deleteCart(item.id)"/>
+                            </v-row>
+                        </v-container>
                     </v-navigation-drawer>
                 </div>
             </div>
@@ -177,7 +167,7 @@ const toggleCollapse = (collapseName: CollapseKey) => {
     }
 
     .drawer-bg{
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(0, 0, 0, 0.2);
         min-height: 100%;
         position: fixed;
         top: 0;

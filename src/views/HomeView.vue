@@ -23,21 +23,25 @@
       window.removeEventListener('scroll',handleScroll);
     })
 
-    const features = [
+    interface Card {
+      image:string;
+      title:string;
+    }
+    const features: Card[] = [
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/15.15c95d2.jpg',title:'Order Food Online'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/16.bbc24cb.jpg',title:'Go Out For Meal'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/17.3634737.jpg',title:'Nightlife & Clubs'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/18.2a12c1e.jpg',title:'Pro Membership'},
     ]
 
-    const collections = [
+    const collections: Card[] = [
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/5.8a5927f.png',title:'Most Searched of 2020'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/6.729f74b.png',title:'Best Openings of 2020'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/7.ea86fb7.png',title:'Trending This Week'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/8.d53c60b.png',title:'Best Of New York'},
     ];
 
-    const cuisines = [
+    const cuisines: Card[] = [
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/9.1c1a4aa.png',title:'Italian'},
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/10.4b83261.png',title:'Chinesse'},
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/11.53f677b.png',title:'Japanesse'},
@@ -46,7 +50,7 @@
     {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/14.05cff0f.png',title:'Mexican'},
     ];
 
-    const restaurants = [
+    const restaurants: Card[] = [
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/15.15c95d2.jpg',title:'Starbucks'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/16.bbc24cb.jpg',title:'Mughal Masala Masala Masala Masala'},
       {image:'https://foodhub-nuxt.vercel.app/_nuxt/img/17.3634737.jpg',title:'Woondal'},

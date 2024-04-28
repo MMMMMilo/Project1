@@ -1,6 +1,11 @@
 <script setup lang="ts">
 
-const locations = [
+interface Location {
+    loc: string;
+    places: string;
+}
+
+const locations:Location[] = [
     {loc:'Newport',places:' (26 places)'},
     {loc:'Brooklyn',places:' (14 places)'},
     {loc:'Chinatown',places:' (10 places)'},
@@ -8,21 +13,21 @@ const locations = [
     {loc:'Coney Island',places:' (6 places)'},
 ]
 
-const abouts = [
+const abouts:string[] = [
     'Careers',
     'Our Stores',
     'Our Cares',
     'Terms & Conditions',
     'Privacy Policy',
 ];
-const cares = [
+const cares:string[] = [
     'Help Center',
     'How to Buy',
     'Track Your Order',
     'Corporate & Bulk Purchasing',
     'Returns & Refunds',
 ]
-const icons = [
+const icons:string[] = [
         'mdi-facebook',
         'mdi-twitter',
         'mdi-instagram',
